@@ -1,12 +1,248 @@
-import { View, Text } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  SafeAreaView,
+} from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { FontAwesome } from "@expo/vector-icons";
+import BankSelectionModal from "../components/BankSelectionModal";
+import TransferConfirmation from "../components/TransferConfirmation";
+import { Bank } from "../models/types";
 
-const transfer = () => {
+// bank data
+const banks: Bank[] = [
+  { id: "1", name: "CIMB ", logo: "🔴" },
+  { id: "2", name: "Alliance Bank ", logo: "🔵" },
+  { id: "3", name: "AmBank", logo: "🔴" },
+  { id: "4", name: "Maybank", logo: "🟡" },
+  { id: "5", name: "Bank Islam", logo: "🟢" },
+  { id: "6", name: "Bank Muamalat", logo: "🟤" },
+];
+
+const Transfer = () => {
+  // state
+  const [recipientBank, setRecipientBank] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
+  const [transferMethod, setTransferMethod] = useState("DuitNow");
+  const [transferType, setTransferType] = useState("Fund Transfer");
+  const [amount, setAmount] = useState("");
+  const [description, setDescription] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [confirmationVisible, setConfirmationVisible] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  // lifecylce
+  useEffect(() => {
+    // Initialize component data if needed
+  }, []);
+
+  // computed
+  const isFormValid = Boolean(recipientBank && accountNumber && amount);
+
+  // methods
+  const selectBank = (bank: Bank) => {
+    setRecipientBank(bank.name);
+    setModalVisible(false);
+  };
+
+  const handleTransferMethodSelect = (method: string) => {
+    setTransferMethod(method);
+  };
+
+  const handleTransferTypeSelect = (type: string) => {
+    setTransferType(type);
+  };
+
+  const handleTransfer = () => {
+    if (!isFormValid) {
+      console.log("Form is invalid");
+      return;
+    }
+
+    setConfirmationVisible(true);
+
+    // console.log("Transfer initiated", {
+    //   recipientBank,
+    //   accountNumber,
+    //   transferMethod,
+    //   transferType,
+    //   amount,
+    //   description,
+    // });
+  };
+
+  const processTransfer = async () => {
+    try {
+      setIsProcessing(true);
+
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      console.log("Transfer successful", {
+        recipientBank,
+        accountNumber,
+        transferMethod,
+        transferType,
+        amount,
+        description,
+      });
+
+      // Reset form or navigate
+      setIsProcessing(false);
+      setConfirmationVisible(false);
+
+      alert("Transfer completed successfully!");
+
+      // Optional: reset form
+      setRecipientBank("");
+      setAccountNumber("");
+      setAmount("");
+      setDescription("");
+    } catch (error) {
+      setIsProcessing(false);
+      console.error("Transfer failed", error);
+      alert("Transfer failed. Please try again.");
+    }
+  };
+
+  // UI
   return (
-    <View className="flex-1 justify-center items-center">
-      <Text className="text-5xl text-blue-600">Transfer</Text>
-    </View>
+    <SafeAreaView className="flex-1 bg-white">
+      <KeyboardAwareScrollView
+        className="flex-1 px-4 py-6"
+        enableOnAndroid={true}
+        enableAutomaticScroll={true}
+        keyboardShouldPersistTaps="handled"
+        extraScrollHeight={50}
+      >
+        <Text className="text-xl font-medium mb-6">Recipient Bank</Text>
+        <TouchableOpacity
+          onPress={() => setModalVisible(true)}
+          className="border border-gray-300 rounded-full p-4 mb-6 flex-row justify-between items-center"
+        >
+          <Text className="text-lg text-gray-700">
+            {recipientBank || "Select Bank"}
+          </Text>
+          <FontAwesome name="chevron-down" size={16} color="#666" />
+        </TouchableOpacity>
+
+        <Text className="text-xl font-medium mb-2">Account Number</Text>
+        <TextInput
+          className="bg-gray-200 p-3 rounded mb-6"
+          value={accountNumber}
+          onChangeText={setAccountNumber}
+          keyboardType="number-pad"
+          placeholder="Enter account number"
+        />
+
+        <Text className="text-xl font-medium mb-2">Transfer Method</Text>
+        <View className="flex-row mb-6">
+          <TouchableOpacity
+            className={`flex-1 py-3 rounded-lg mr-2 ${
+              transferMethod === "DuitNow"
+                ? "bg-white border border-blue-500"
+                : "bg-gray-200"
+            }`}
+            onPress={() => handleTransferMethodSelect("DuitNow")}
+          >
+            <Text className="text-center">DuitNow</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className={`flex-1 py-3 rounded-lg ml-2 ${
+              transferMethod === "IBG"
+                ? "bg-white border border-blue-500"
+                : "bg-gray-200"
+            }`}
+            onPress={() => handleTransferMethodSelect("IBG")}
+          >
+            <Text className="text-center">IBG</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View className="flex-row mb-6">
+          <TouchableOpacity
+            className={`flex-1 py-4 rounded-lg mr-2 ${
+              transferType === "Fund Transfer"
+                ? "bg-white border border-blue-500"
+                : "bg-gray-200"
+            }`}
+            onPress={() => handleTransferTypeSelect("Fund Transfer")}
+          >
+            <Text className="text-center">Fund Transfer</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className={`flex-1 py-4 rounded-lg ml-2 ${
+              transferType === "Credit Card"
+                ? "bg-white border border-blue-500"
+                : "bg-gray-200"
+            }`}
+            onPress={() => handleTransferTypeSelect("Credit Card")}
+          >
+            <Text className="text-center">Credit Card</Text>
+          </TouchableOpacity>
+        </View>
+
+        <Text className="text-xl font-medium mb-2">Amount</Text>
+        <TextInput
+          className="bg-gray-200 p-3 rounded mb-6"
+          value={amount}
+          onChangeText={setAmount}
+          keyboardType="numeric"
+          placeholder="0.00"
+        />
+
+        <Text className="text-xl font-medium mb-2">Description</Text>
+        <TextInput
+          className="bg-gray-200 p-3 rounded mb-6"
+          value={description}
+          onChangeText={setDescription}
+          placeholder="Enter description"
+        />
+
+        <TouchableOpacity
+          className={`py-3 rounded self-center px-8 mb-6 ${
+            isFormValid ? "bg-blue-500" : "bg-gray-300"
+          }`}
+          onPress={handleTransfer}
+          disabled={!isFormValid}
+        >
+          <Text
+            className={`text-center ${
+              isFormValid ? "text-white" : "text-gray-500"
+            }`}
+          >
+            Transfer
+          </Text>
+        </TouchableOpacity>
+      </KeyboardAwareScrollView>
+
+      {/* Bank Selection Modal */}
+      <BankSelectionModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onSelectBank={selectBank}
+        selectedBankName={recipientBank}
+        banks={banks}
+      />
+
+      <TransferConfirmation
+        visible={confirmationVisible}
+        onClose={() => setConfirmationVisible(false)}
+        onConfirm={processTransfer}
+        transferDetails={{
+          recipientBank,
+          accountNumber,
+          amount,
+          description,
+          transferMethod,
+          transferType,
+        }}
+        isProcessing={isProcessing}
+      />
+    </SafeAreaView>
   );
 };
 
-export default transfer;
+export default Transfer;

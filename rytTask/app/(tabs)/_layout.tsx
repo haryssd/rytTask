@@ -2,6 +2,7 @@ import React from "react";
 import { Tabs } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
 import { View, Text } from "react-native";
+import "../global.css";
 
 export default function TabLayout() {
   return (
@@ -28,7 +29,7 @@ export default function TabLayout() {
         },
         tabBarShowLabel: false,
         headerShown: false,
-        
+
         tabBarIcon: ({ color, focused }) => {
           let iconName;
           let label = "";
