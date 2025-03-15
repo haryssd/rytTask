@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { FontAwesome } from "@expo/vector-icons";
+import { router } from "expo-router";
 import BankSelectionModal from "../components/BankSelectionModal";
 import TransferConfirmation from "../components/TransferConfirmation";
 import { Bank } from "../models/types";
@@ -32,7 +33,7 @@ const Transfer = () => {
   const [description, setDescription] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmationVisible, setConfirmationVisible] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // lifecylce
   useEffect(() => {
@@ -76,7 +77,7 @@ const Transfer = () => {
 
   const processTransfer = async () => {
     try {
-      setIsProcessing(true);
+      setLoading(true);
 
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
@@ -89,19 +90,23 @@ const Transfer = () => {
         description,
       });
 
-      // Reset form or navigate
-      setIsProcessing(false);
+      setLoading(false);
       setConfirmationVisible(false);
 
-      alert("Transfer completed successfully!");
-
-      // Optional: reset form
       setRecipientBank("");
       setAccountNumber("");
       setAmount("");
       setDescription("");
+      setTransferMethod("DuitNow");
+      setTransferType("Fund Transfer");
+
+      alert("Transfer completed successfully!");
+
+      router.navigate({
+        pathname: "/(tabs)",
+      });
     } catch (error) {
-      setIsProcessing(false);
+      setLoading(false);
       console.error("Transfer failed", error);
       alert("Transfer failed. Please try again.");
     }
@@ -239,7 +244,7 @@ const Transfer = () => {
           transferMethod,
           transferType,
         }}
-        isProcessing={isProcessing}
+        loading={loading}
       />
     </SafeAreaView>
   );

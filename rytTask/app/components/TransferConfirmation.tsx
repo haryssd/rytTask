@@ -21,7 +21,7 @@ interface TransferConfirmationProps {
     transferMethod: string;
     transferType: string;
   };
-  isProcessing: boolean;
+  loading: boolean;
 }
 
 const TransferConfirmation = ({
@@ -29,7 +29,7 @@ const TransferConfirmation = ({
   onClose,
   onConfirm,
   transferDetails,
-  isProcessing,
+  loading,
 }: TransferConfirmationProps) => {
   const formatAmount = (amount: string) => {
     const numAmount = parseFloat(amount);
@@ -45,7 +45,7 @@ const TransferConfirmation = ({
     >
       <SafeAreaView className="flex-1 bg-black/50 justify-center items-center">
         <View className="w-11/12 bg-white rounded-xl p-6">
-          {isProcessing ? (
+          {loading ? (
             <View className="items-center py-8">
               <ActivityIndicator size="large" color="#3366FF" />
               <Text className="text-lg font-medium mt-4 text-center">
