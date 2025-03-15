@@ -5,24 +5,46 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
+import { FontAwesome } from "@expo/vector-icons";
 
+// state
 const index = () => {
+  const [isVisible, setVisible] = useState(false);
+
+  // method
+  const toggleVisibility = () => {
+    setVisible(!isVisible);
+  };
+
+  // UI
   return (
     <SafeAreaView className="flex-1">
       <View className="flex items-center px-4 py-6">
         <Text className="text-5xl text-black mb-6 mt-8">Welcome !</Text>
 
         <View className="w-full bg-white rounded-xl shadow-sm p-6 mx-6 mb-4 mt-6">
-          {/* Account */}
-          <Text className="text-xl font-bold text-gray-800">Account</Text>
-          <Text className="text-lg text-gray-600 px-6">account no.</Text>
+          <View className="flex-row justify-between items-center">
+            <Text className="text-xl font-bold text-gray-800">Account</Text>
+            <TouchableOpacity onPress={toggleVisibility}>
+              <FontAwesome
+                name={isVisible ? "eye" : "eye-slash"}
+                size={22}
+                color="#4B5563"
+              />
+            </TouchableOpacity>
+          </View>
+          <Text className="text-lg text-gray-600 px-6">
+            {isVisible ? "1234 5678 9101" : "******"}
+          </Text>
 
           {/* Current Balance */}
           <Text className="text-xl font-bold mt-5 text-gray-800">
             Current Balance
           </Text>
-          <Text className="text-lg text-gray-600 px-6">MYR</Text>
+          <Text className="text-lg text-gray-600 px-6">
+            {isVisible ? "MYR 10,000.00" : "MYR ******"}
+          </Text>
         </View>
 
         {/* Transaction History */}
