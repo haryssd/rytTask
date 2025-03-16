@@ -3,29 +3,94 @@ import {
   Text,
   SafeAreaView,
   TouchableOpacity,
-  FlatList,
   Alert,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import * as LocalAuthentication from "expo-local-authentication";
 import BiometricError from "../components/BiometricError";
+import TransactionHistory from "../components/TransactionHistory";
+import transactionsData from "../assets/transactions.json";
+import TransactionDetails from "../components/TransactionDetails";
 
-// state
-const index = () => {
-  const [isVisible, setVisible] = useState(false);
-  const [biometricErrorVisible, setBiometricErrorVisible] = useState(false);
-  const [hasBiometrics, setHasBiometrics] = useState(false);
+// Define Transaction type
+interface Transaction {
+  id: string;
+  recipientBank: string;
+  accountNumber: string;
+  transferMethod: string;
+  transferType: string;
+  amount: number;
+  description: string;
+  createdAt: string;
+  type: "credit" | "debit";
+}
 
+// Transaction item component for the home screen
+const TransactionItem: React.FC<{ transaction: Transaction }> = ({
+  transaction,
+}) => {
+  // computed
+  const isCredit = transaction.type === "credit";
+
+  // methods
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-MY", {
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  // UI
+  return (
+    <View className="flex-row justify-between items-center py-3 border-b border-gray-100">
+      <View className="flex-1">
+        <Text className="font-medium">{transaction.description}</Text>
+        <Text className="text-xs text-gray-500">
+          {formatDate(transaction.createdAt)}
+        </Text>
+      </View>
+      <Text
+        className={`font-medium ${
+          isCredit ? "text-green-600" : "text-red-600"
+        }`}
+      >
+        {isCredit ? "+" : "-"} MYR {transaction.amount.toFixed(2)}
+      </Text>
+    </View>
+  );
+};
+
+const Index: React.FC = () => {
+  // state
+  const [isVisible, setVisible] = useState<boolean>(false);
+  const [biometricErrorVisible, setBiometricErrorVisible] =
+    useState<boolean>(false);
+  const [hasBiometrics, setHasBiometrics] = useState<boolean>(false);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [transactionModalVisible, setTransactionModalVisible] =
+    useState<boolean>(false);
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<Transaction | null>(null);
+  const [detailsVisible, setDetailsVisible] = useState(false);
+
+  // Created/Lifecycle
   useEffect(() => {
     checkBiometricAvailability();
+
+    // Sort transactions
+    const sortedTransactions = [...transactionsData].sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    ) as Transaction[];
+    setTransactions(sortedTransactions);
   }, []);
 
   // methods
-  const checkBiometricAvailability = async () => {
+  const checkBiometricAvailability = async (): Promise<void> => {
     try {
       const hasHardware = await LocalAuthentication.hasHardwareAsync();
-
       const isEnrolled = await LocalAuthentication.isEnrolledAsync();
 
       console.log("ada biometric", hasHardware);
@@ -38,7 +103,7 @@ const index = () => {
     }
   };
 
-  const authenticateUser = async () => {
+  const authenticateUser = async (): Promise<boolean> => {
     try {
       const supportedTypes =
         await LocalAuthentication.supportedAuthenticationTypesAsync();
@@ -57,7 +122,7 @@ const index = () => {
         fallbackLabel: "Use passcode",
         cancelLabel: "Cancel",
         disableDeviceFallback: false,
-        requireConfirmation: false, 
+        requireConfirmation: false,
       });
 
       if (!result.success) {
@@ -72,7 +137,7 @@ const index = () => {
     }
   };
 
-  const handleRetryAuthentication = async () => {
+  const handleRetryAuthentication = async (): Promise<void> => {
     setBiometricErrorVisible(false);
     setTimeout(async () => {
       const authenticated = await authenticateUser();
@@ -82,11 +147,11 @@ const index = () => {
     }, 500);
   };
 
-  const handleCloseApp = () => {
+  const handleCloseApp = (): void => {
     Alert.alert("Exit App", "exit the application");
   };
 
-  const toggleVisibility = async () => {
+  const toggleVisibility = async (): Promise<void> => {
     if (!isVisible) {
       const authenticated = await authenticateUser();
       if (authenticated) {
@@ -97,13 +162,23 @@ const index = () => {
     }
   };
 
+  const handleTransactionPress = (transaction: Transaction) => {
+    setSelectedTransaction(transaction);
+    setDetailsVisible(true);
+  };
+
+  const handleCloseDetails = () => {
+    setDetailsVisible(false);
+    setSelectedTransaction(null);
+  };
+
   // UI
   return (
     <SafeAreaView className="flex-1">
       <View className="flex items-center px-4 py-6">
         <Text className="text-5xl text-black mb-6 mt-8">Welcome !</Text>
 
-        <View className="w-full bg-white rounded-xl shadow-sm p-6 mx-6 mb-4 mt-6">
+        <View className="w-full bg-white rounded-xl shadow-sm p-6 mb-4 mt-6">
           <View className="flex-row justify-between items-center">
             <Text className="text-xl font-bold text-gray-800">Account</Text>
             <TouchableOpacity onPress={toggleVisibility}>
@@ -128,19 +203,33 @@ const index = () => {
         </View>
 
         {/* Transaction History */}
-        <View className="mb-2">
-          <Text className="font-bold text-lg mb-1">Transaction History</Text>
-          <View className="border-t border-gray-300 mb-2"></View>
+        <View className="w-full mt-6 mb-4">
+          <Text className="font-bold text-lg text-center mb-2">
+            Transaction History
+          </Text>
+          <View className="border-t border-gray-300 mb-4"></View>
 
-          {/* flatlist */}
+          <View className="bg-white rounded-xl shadow-sm p-4">
+            {transactions.slice(0, 4).map((item) => (
+              <TouchableOpacity
+                key={item.id}
+                onPress={() => handleTransactionPress(item)}
+              >
+                <TransactionItem transaction={item} />
+              </TouchableOpacity>
+            ))}
+          </View>
 
-          <TouchableOpacity>
-            <Text className="text-center text-blue-600">View More</Text>
+          <TouchableOpacity
+            className="mt-2 items-center"
+            onPress={() => setTransactionModalVisible(true)}
+          >
+            <Text className="text-blue-600">View More</Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      {/* Biometric Error  */}
+      {/* Biometric Error */}
       <BiometricError
         visible={biometricErrorVisible}
         onRetry={handleRetryAuthentication}
@@ -151,8 +240,22 @@ const index = () => {
             : "Passcode authentication failed. Please try again or close the app."
         }
       />
+
+      {/* Transaction History */}
+      <TransactionHistory
+        visible={transactionModalVisible}
+        onClose={() => setTransactionModalVisible(false)}
+        transactions={transactions}
+      />
+
+      {/* Transaction Details Modal */}
+      <TransactionDetails
+        visible={detailsVisible}
+        onClose={handleCloseDetails}
+        transaction={selectedTransaction}
+      />
     </SafeAreaView>
   );
 };
 
-export default index;
+export default Index;

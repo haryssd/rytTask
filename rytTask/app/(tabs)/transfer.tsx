@@ -35,11 +35,6 @@ const Transfer = () => {
   const [confirmationVisible, setConfirmationVisible] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // lifecylce
-  useEffect(() => {
-    // Initialize component data if needed
-  }, []);
-
   // computed
   const isFormValid = Boolean(recipientBank && accountNumber && amount);
 
@@ -166,6 +161,7 @@ const Transfer = () => {
           </TouchableOpacity>
         </View>
 
+        <Text className="text-xl font-medium mb-2">Type</Text>
         <View className="flex-row mb-6">
           <TouchableOpacity
             className={`flex-1 py-4 rounded-lg mr-2 ${

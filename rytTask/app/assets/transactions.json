@@ -1,0 +1,90 @@
+[
+  {
+    "id": "tx-001",
+    "recipientBank": "CIMB",
+    "accountNumber": "7890 1234 5678",
+    "transferMethod": "DuitNow",
+    "transferType": "Fund Transfer",
+    "amount": 500.0,
+    "description": "Monthly rent payment",
+    "createdAt": "2025-03-15T14:30:45Z",
+    "type": "debit"
+  },
+  {
+    "id": "tx-002",
+    "recipientBank": "Maybank",
+    "accountNumber": "6543 2109 8765",
+    "transferMethod": "IBG",
+    "transferType": "Fund Transfer",
+    "amount": 250.0,
+    "description": "Grocery shopping",
+    "createdAt": "2025-03-14T10:15:22Z",
+    "type": "debit"
+  },
+  {
+    "id": "tx-003",
+    "recipientBank": "Self",
+    "accountNumber": "1234 5678 9101",
+    "transferMethod": "Direct Deposit",
+    "transferType": "Credit Card",
+    "amount": 3500.0,
+    "description": "Salary deposit",
+    "createdAt": "2025-03-10T09:00:00Z",
+    "type": "credit"
+  },
+  {
+    "id": "tx-004",
+    "recipientBank": "AmBank",
+    "accountNumber": "2468 1357 9080",
+    "transferMethod": "DuitNow",
+    "transferType": "Fund Transfer",
+    "amount": 120.0,
+    "description": "Electricity bill payment",
+    "createdAt": "2025-03-07T16:45:33Z",
+    "type": "debit"
+  },
+  {
+    "id": "tx-005",
+    "recipientBank": "Bank Islam",
+    "accountNumber": "1357 2468 0909",
+    "transferMethod": "IBG",
+    "transferType": "Fund Transfer",
+    "amount": 75.5,
+    "description": "Internet bill",
+    "createdAt": "2025-03-05T14:20:10Z",
+    "type": "debit"
+  },
+  {
+    "id": "tx-006",
+    "recipientBank": "Self",
+    "accountNumber": "1234 5678 9101",
+    "transferMethod": "Direct Deposit",
+    "transferType": "Credit Card",
+    "amount": 200.0,
+    "description": "Refund from online store",
+    "createdAt": "2025-03-03T11:30:45Z",
+    "type": "credit"
+  },
+  {
+    "id": "tx-007",
+    "recipientBank": "Bank Muamalat",
+    "accountNumber": "9753 1086 4209",
+    "transferMethod": "DuitNow",
+    "transferType": "Fund Transfer",
+    "amount": 300.0,
+    "description": "Car insurance payment",
+    "createdAt": "2025-03-01T09:15:22Z",
+    "type": "debit"
+  },
+  {
+    "id": "tx-008",
+    "recipientBank": "Alliance Bank",
+    "accountNumber": "3692 5814 7036",
+    "transferMethod": "IBG",
+    "transferType": "Fund Transfer",
+    "amount": 50.0,
+    "description": "Mobile phone bill",
+    "createdAt": "2025-02-28T15:40:18Z",
+    "type": "debit"
+  }
+]
