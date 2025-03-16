@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 
-// Define Transaction type
 interface Transaction {
   id: string;
   recipientBank: string;

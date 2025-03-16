@@ -7,7 +7,6 @@ import React, {
 } from "react";
 import initialTransactions from "../assets/transactions.json";
 
-// Transaction interface
 export interface Transaction {
   id: string;
   recipientBank: string;

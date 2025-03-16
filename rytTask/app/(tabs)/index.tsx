@@ -17,7 +17,6 @@ import { useBalance, Transaction } from "../context/BalanceContext";
 const TransactionItem: React.FC<{ transaction: Transaction }> = ({
   transaction,
 }) => {
-  // computed
 
   // methods
   const formatDate = (dateString: string): string => {

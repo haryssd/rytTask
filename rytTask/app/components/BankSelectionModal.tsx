@@ -11,7 +11,6 @@ import {
 import { FontAwesome } from "@expo/vector-icons";
 import { Bank } from "../models/types";
 
-// Component props interface
 interface BankSelectionModalProps {
   visible: boolean;
   onClose: () => void;
