@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { FontAwesome } from "@expo/vector-icons";
@@ -12,6 +13,7 @@ import { router } from "expo-router";
 import BankSelectionModal from "../components/BankSelectionModal";
 import TransferConfirmation from "../components/TransferConfirmation";
 import { Bank } from "../models/types";
+import { useBalance } from "../context/BalanceContext";
 
 // bank data
 const banks: Bank[] = [
@@ -37,6 +39,7 @@ const Transfer = () => {
 
   // computed
   const isFormValid = Boolean(recipientBank && accountNumber && amount);
+  const { updateBalance, addTransaction } = useBalance();
 
   // methods
   const selectBank = (bank: Bank) => {
@@ -74,37 +77,85 @@ const Transfer = () => {
     try {
       setLoading(true);
 
+      const transferAmount = parseFloat(amount);
+
+      if (isNaN(transferAmount) || transferAmount <= 0) {
+        setLoading(false);
+        Alert.alert(
+          "Invalid Amount",
+          "Please enter a valid amount greater than 0."
+        );
+        return;
+      }
+
       await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      const success = updateBalance(-transferAmount);
+
+      if (!success) {
+        setLoading(false);
+        Alert.alert(
+          "Insufficient Balance",
+          "You don't have enough funds to complete this transfer."
+        );
+        return;
+      }
+
+      const newTransaction = {
+        id: `tx-${Date.now()}`,
+        recipientBank,
+        accountNumber,
+        transferMethod,
+        transferType,
+        amount: transferAmount,
+        description,
+        createdAt: new Date().toISOString(),
+      };
+
+      addTransaction(newTransaction);
 
       console.log("Transfer successful", {
         recipientBank,
         accountNumber,
         transferMethod,
         transferType,
-        amount,
+        amount: transferAmount,
         description,
       });
 
+      // reset
       setLoading(false);
       setConfirmationVisible(false);
+      resetForm();
 
-      setRecipientBank("");
-      setAccountNumber("");
-      setAmount("");
-      setDescription("");
-      setTransferMethod("DuitNow");
-      setTransferType("Fund Transfer");
-
-      alert("Transfer completed successfully!");
-
-      router.navigate({
-        pathname: "/(tabs)",
-      });
+      Alert.alert(
+        "Transfer Successful",
+        "Your transfer has been processed successfully.",
+        [{ text: "OK", onPress: () => navigateToHome() }]
+      );
     } catch (error) {
       setLoading(false);
       console.error("Transfer failed", error);
-      alert("Transfer failed. Please try again.");
+      Alert.alert(
+        "Transfer Failed",
+        "There was an error processing your transfer. Please try again."
+      );
     }
+  };
+
+  const resetForm = () => {
+    setRecipientBank("");
+    setAccountNumber("");
+    setAmount("");
+    setDescription("");
+    setTransferMethod("DuitNow");
+    setTransferType("Fund Transfer");
+  };
+
+  const navigateToHome = () => {
+    router.navigate({
+      pathname: "/(tabs)",
+    });
   };
 
   // UI

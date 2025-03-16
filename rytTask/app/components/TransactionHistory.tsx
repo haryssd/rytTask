@@ -19,13 +19,12 @@ interface Transaction {
   amount: number;
   description: string;
   createdAt: string;
-  type: "credit" | "debit";
 }
 
 const TransactionItem: React.FC<{ transaction: Transaction }> = ({
   transaction,
 }) => {
-  const isCredit = transaction.type === "credit";
+  //computed
 
   // methods
   const formatDate = (dateString: string): string => {
@@ -45,13 +44,7 @@ const TransactionItem: React.FC<{ transaction: Transaction }> = ({
           {formatDate(transaction.createdAt)}
         </Text>
       </View>
-      <Text
-        className={`font-medium ${
-          isCredit ? "text-green-600" : "text-red-600"
-        }`}
-      >
-        {isCredit ? "+" : "-"} MYR {transaction.amount.toFixed(2)}
-      </Text>
+      <Text className="font-medium ">MYR {transaction.amount.toFixed(2)}</Text>
     </View>
   );
 };

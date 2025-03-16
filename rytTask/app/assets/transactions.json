@@ -7,8 +7,8 @@
     "transferType": "Fund Transfer",
     "amount": 500.0,
     "description": "Monthly rent payment",
-    "createdAt": "2025-03-15T14:30:45Z",
-    "type": "debit"
+    "createdAt": "2025-03-15T14:30:45Z"
+    
   },
   {
     "id": "tx-002",
@@ -18,8 +18,7 @@
     "transferType": "Fund Transfer",
     "amount": 250.0,
     "description": "Grocery shopping",
-    "createdAt": "2025-03-14T10:15:22Z",
-    "type": "debit"
+    "createdAt": "2025-03-14T10:15:22Z"
   },
   {
     "id": "tx-003",
@@ -29,8 +28,7 @@
     "transferType": "Credit Card",
     "amount": 3500.0,
     "description": "Salary deposit",
-    "createdAt": "2025-03-10T09:00:00Z",
-    "type": "credit"
+    "createdAt": "2025-03-10T09:00:00Z"
   },
   {
     "id": "tx-004",
@@ -40,8 +38,7 @@
     "transferType": "Fund Transfer",
     "amount": 120.0,
     "description": "Electricity bill payment",
-    "createdAt": "2025-03-07T16:45:33Z",
-    "type": "debit"
+    "createdAt": "2025-03-07T16:45:33Z"
   },
   {
     "id": "tx-005",
@@ -51,8 +48,7 @@
     "transferType": "Fund Transfer",
     "amount": 75.5,
     "description": "Internet bill",
-    "createdAt": "2025-03-05T14:20:10Z",
-    "type": "debit"
+    "createdAt": "2025-03-05T14:20:10Z"
   },
   {
     "id": "tx-006",
@@ -62,8 +58,7 @@
     "transferType": "Credit Card",
     "amount": 200.0,
     "description": "Refund from online store",
-    "createdAt": "2025-03-03T11:30:45Z",
-    "type": "credit"
+    "createdAt": "2025-03-03T11:30:45Z"
   },
   {
     "id": "tx-007",
@@ -73,8 +68,7 @@
     "transferType": "Fund Transfer",
     "amount": 300.0,
     "description": "Car insurance payment",
-    "createdAt": "2025-03-01T09:15:22Z",
-    "type": "debit"
+    "createdAt": "2025-03-01T09:15:22Z"
   },
   {
     "id": "tx-008",
@@ -84,7 +78,126 @@
     "transferType": "Fund Transfer",
     "amount": 50.0,
     "description": "Mobile phone bill",
-    "createdAt": "2025-02-28T15:40:18Z",
-    "type": "debit"
+    "createdAt": "2025-02-28T15:40:18Z"
+  },
+  {
+    "id": "tx-009",
+    "recipientBank": "CIMB",
+    "accountNumber": "8877 6655 4433",
+    "transferMethod": "DuitNow",
+    "transferType": "Fund Transfer",
+    "amount": 450.0,
+    "description": "School fees payment",
+    "createdAt": "2025-02-25T09:30:45Z"
+  },
+  {
+    "id": "tx-010",
+    "recipientBank": "Self",
+    "accountNumber": "1234 5678 9101",
+    "transferMethod": "Direct Deposit",
+    "transferType": "Credit Card",
+    "amount": 150.0,
+    "description": "Cashback reward",
+    "createdAt": "2025-02-22T14:15:33Z"
+  },
+  {
+    "id": "tx-011",
+    "recipientBank": "RHB Bank",
+    "accountNumber": "1122 3344 5566",
+    "transferMethod": "IBG",
+    "transferType": "Fund Transfer",
+    "amount": 85.75,
+    "description": "Water bill payment",
+    "createdAt": "2025-02-20T16:40:22Z"
+  },
+  {
+    "id": "tx-012",
+    "recipientBank": "Maybank",
+    "accountNumber": "9988 7766 5544",
+    "transferMethod": "DuitNow",
+    "transferType": "Fund Transfer",
+    "amount": 320.5,
+    "description": "Home repair service",
+    "createdAt": "2025-02-18T11:20:45Z"
+  },
+  {
+    "id": "tx-013",
+    "recipientBank": "Self",
+    "accountNumber": "1234 5678 9101",
+    "transferMethod": "Direct Deposit",
+    "transferType": "Fund Transfer",
+    "amount": 1200.0,
+    "description": "Bonus payment",
+    "createdAt": "2025-02-15T10:00:00Z"
+  },
+  {
+    "id": "tx-014",
+    "recipientBank": "HSBC",
+    "accountNumber": "5544 3322 1100",
+    "transferMethod": "IBG",
+    "transferType": "Fund Transfer",
+    "amount": 155.3,
+    "description": "Online subscription services",
+    "createdAt": "2025-02-12T17:35:12Z"
+  },
+  {
+    "id": "tx-015",
+    "recipientBank": "OCBC Bank",
+    "accountNumber": "7890 1234 5678",
+    "transferMethod": "DuitNow",
+    "transferType": "Fund Transfer",
+    "amount": 75.0,
+    "description": "Gym membership fee",
+    "createdAt": "2025-02-10T09:45:30Z"
+  },
+  {
+    "id": "tx-016",
+    "recipientBank": "Bank Islam",
+    "accountNumber": "2233 4455 6677",
+    "transferMethod": "IBG",
+    "transferType": "Fund Transfer",
+    "amount": 425.75,
+    "description": "Home insurance premium",
+    "createdAt": "2025-02-08T13:25:45Z"
+  },
+  {
+    "id": "tx-017",
+    "recipientBank": "Self",
+    "accountNumber": "1234 5678 9101",
+    "transferMethod": "Direct Deposit",
+    "transferType": "Credit Card",
+    "amount": 50.0,
+    "description": "Referral bonus",
+    "createdAt": "2025-02-05T15:55:22Z"
+  },
+  {
+    "id": "tx-018",
+    "recipientBank": "AmBank",
+    "accountNumber": "3344 5566 7788",
+    "transferMethod": "DuitNow",
+    "transferType": "Fund Transfer",
+    "amount": 65.9,
+    "description": "Bookstore purchase",
+    "createdAt": "2025-02-03T10:40:15Z"
+  },
+  {
+    "id": "tx-019",
+    "recipientBank": "Alliance Bank",
+    "accountNumber": "8765 4321 9876",
+    "transferMethod": "IBG",
+    "transferType": "Fund Transfer",
+    "amount": 195.0,
+    "description": "Child's school supplies",
+    "createdAt": "2025-02-01T14:30:00Z"
+  },
+  {
+    "id": "tx-020",
+    "recipientBank": "Self",
+    "accountNumber": "1234 5678 9101",
+    "transferMethod": "Direct Deposit",
+    "transferType": "Fund Transfer",
+    "amount": 3500.0,
+    "description": "February salary deposit",
+    "createdAt": "2025-01-30T09:00:00Z"
   }
 ]

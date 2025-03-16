@@ -10,28 +10,14 @@ import { FontAwesome } from "@expo/vector-icons";
 import * as LocalAuthentication from "expo-local-authentication";
 import BiometricError from "../components/BiometricError";
 import TransactionHistory from "../components/TransactionHistory";
-import transactionsData from "../assets/transactions.json";
 import TransactionDetails from "../components/TransactionDetails";
+import { useBalance, Transaction } from "../context/BalanceContext";
 
-// Define Transaction type
-interface Transaction {
-  id: string;
-  recipientBank: string;
-  accountNumber: string;
-  transferMethod: string;
-  transferType: string;
-  amount: number;
-  description: string;
-  createdAt: string;
-  type: "credit" | "debit";
-}
-
-// Transaction item component for the home screen
+// Transaction item component
 const TransactionItem: React.FC<{ transaction: Transaction }> = ({
   transaction,
 }) => {
   // computed
-  const isCredit = transaction.type === "credit";
 
   // methods
   const formatDate = (dateString: string): string => {
@@ -51,13 +37,7 @@ const TransactionItem: React.FC<{ transaction: Transaction }> = ({
           {formatDate(transaction.createdAt)}
         </Text>
       </View>
-      <Text
-        className={`font-medium ${
-          isCredit ? "text-green-600" : "text-red-600"
-        }`}
-      >
-        {isCredit ? "+" : "-"} MYR {transaction.amount.toFixed(2)}
-      </Text>
+      <Text className="font-medium">MYR {transaction.amount.toFixed(2)}</Text>
     </View>
   );
 };
@@ -68,23 +48,18 @@ const Index: React.FC = () => {
   const [biometricErrorVisible, setBiometricErrorVisible] =
     useState<boolean>(false);
   const [hasBiometrics, setHasBiometrics] = useState<boolean>(false);
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  // const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [transactionModalVisible, setTransactionModalVisible] =
     useState<boolean>(false);
   const [selectedTransaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
   const [detailsVisible, setDetailsVisible] = useState(false);
 
+  const { balance, transactions } = useBalance();
+
   // Created/Lifecycle
   useEffect(() => {
     checkBiometricAvailability();
-
-    // Sort transactions
-    const sortedTransactions = [...transactionsData].sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    ) as Transaction[];
-    setTransactions(sortedTransactions);
   }, []);
 
   // methods
@@ -198,7 +173,7 @@ const Index: React.FC = () => {
             Current Balance
           </Text>
           <Text className="text-lg text-gray-600 px-6">
-            {isVisible ? "MYR 10,000.00" : "MYR ******"}
+            {isVisible ? `MYR ${balance.toFixed(2)}` : "MYR ******"}
           </Text>
         </View>
 

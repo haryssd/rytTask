@@ -18,7 +18,6 @@ interface Transaction {
   amount: number;
   description: string;
   createdAt: string;
-  type: "credit" | "debit";
 }
 
 interface TransactionDetailsProps {
@@ -69,14 +68,7 @@ const TransactionDetails: React.FC<TransactionDetailsProps> = ({
           </View>
 
           <View className="bg-blue-50 p-4 rounded-lg mb-6">
-            <Text
-              className={`font-bold text-lg text-center ${
-                transaction.type === "credit"
-                  ? "text-green-600"
-                  : "text-red-600"
-              }`}
-            >
-              {transaction.type === "credit" ? "+" : "-"} MYR{" "}
+            <Text className="font-bold text-lg text-center">
               {formatAmount(transaction.amount)}
             </Text>
           </View>

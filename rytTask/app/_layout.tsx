@@ -4,12 +4,15 @@ import { View, Text, BackHandler } from "react-native";
 import * as LocalAuthentication from "expo-local-authentication";
 import BiometricError from "./components/BiometricError";
 import "./global.css";
+import { BalanceProvider } from "./context/BalanceContext";
 
 export default function RootLayout() {
+  // state
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [errorVisible, setErrorVisible] = useState(false);
 
+  // created / lifecycle
   useEffect(() => {
     authenticateUser();
   }, []);
@@ -56,7 +59,7 @@ export default function RootLayout() {
   };
 
   const handleClose = () => {
-    BackHandler.exitApp(); 
+    BackHandler.exitApp();
     setErrorVisible(false);
     setLoading(false);
   };
@@ -83,12 +86,14 @@ export default function RootLayout() {
   }
 
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-    </Stack>
+    <BalanceProvider>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      </Stack>
+    </BalanceProvider>
   );
 }
