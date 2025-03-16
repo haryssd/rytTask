@@ -4,17 +4,97 @@ import {
   SafeAreaView,
   TouchableOpacity,
   FlatList,
+  Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesome } from "@expo/vector-icons";
+import * as LocalAuthentication from "expo-local-authentication";
+import BiometricError from "../components/BiometricError";
 
 // state
 const index = () => {
   const [isVisible, setVisible] = useState(false);
+  const [biometricErrorVisible, setBiometricErrorVisible] = useState(false);
+  const [hasBiometrics, setHasBiometrics] = useState(false);
 
-  // method
-  const toggleVisibility = () => {
-    setVisible(!isVisible);
+  useEffect(() => {
+    checkBiometricAvailability();
+  }, []);
+
+  // methods
+  const checkBiometricAvailability = async () => {
+    try {
+      const hasHardware = await LocalAuthentication.hasHardwareAsync();
+
+      const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+
+      console.log("ada biometric", hasHardware);
+      console.log("on biometric", isEnrolled);
+
+      setHasBiometrics(hasHardware && isEnrolled);
+    } catch (error) {
+      console.error("Error checking biometric availability:", error);
+      setHasBiometrics(false);
+    }
+  };
+
+  const authenticateUser = async () => {
+    try {
+      const supportedTypes =
+        await LocalAuthentication.supportedAuthenticationTypesAsync();
+      const hasFaceID = supportedTypes.includes(
+        LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION
+      );
+
+      if (hasFaceID) {
+        console.log("Face ID is available");
+      } else {
+        console.log("Face ID not available, falling back to passcode");
+      }
+
+      const result = await LocalAuthentication.authenticateAsync({
+        promptMessage: "Authenticate to view sensitive information",
+        fallbackLabel: "Use passcode",
+        cancelLabel: "Cancel",
+        disableDeviceFallback: false,
+        requireConfirmation: false, 
+      });
+
+      if (!result.success) {
+        setBiometricErrorVisible(true);
+      }
+
+      return result.success;
+    } catch (error) {
+      console.error("Authentication error:", error);
+      setBiometricErrorVisible(true);
+      return false;
+    }
+  };
+
+  const handleRetryAuthentication = async () => {
+    setBiometricErrorVisible(false);
+    setTimeout(async () => {
+      const authenticated = await authenticateUser();
+      if (authenticated) {
+        setVisible(true);
+      }
+    }, 500);
+  };
+
+  const handleCloseApp = () => {
+    Alert.alert("Exit App", "exit the application");
+  };
+
+  const toggleVisibility = async () => {
+    if (!isVisible) {
+      const authenticated = await authenticateUser();
+      if (authenticated) {
+        setVisible(true);
+      }
+    } else {
+      setVisible(false);
+    }
   };
 
   // UI
@@ -59,6 +139,18 @@ const index = () => {
           </TouchableOpacity>
         </View>
       </View>
+
+      {/* Biometric Error  */}
+      <BiometricError
+        visible={biometricErrorVisible}
+        onRetry={handleRetryAuthentication}
+        onClose={handleCloseApp}
+        errorMessage={
+          hasBiometrics
+            ? "Face ID authentication failed. Please try again or close the app."
+            : "Passcode authentication failed. Please try again or close the app."
+        }
+      />
     </SafeAreaView>
   );
 };
