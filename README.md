@@ -21,4 +21,9 @@ If testing with Expo Go on iOS:
 3. Start the app: `npx expo start`
 4. Scan the QR code with your iOS device
 
+If Option 2 doesn't work where QR Code can't be scan, try to uninstall the expo-dev-client dependencies:
+1. `npm uninstall expo-dev-client`
+2. Install depencies: `npm install`
+3. Start the app: `npx expo start --clear`
+
 **Note**: When using Expo Go, Face ID authentication will default to passcode authentication instead.
